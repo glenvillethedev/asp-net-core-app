@@ -1,0 +1,25 @@
+﻿@using ExpensesTracker.Models.Enums
+
+<th>
+    @if ((int?)ViewBag.SortModel.OrderBy == (int)OrderOptions.ASCENDING)
+    {
+        <a class="sortable" href="~/entry?SearchString=@(ViewBag.SearchModel.SearchString)&MinAmount=@(ViewBag.SearchModel.MinAmount)&MaxAmount=@(ViewBag.SearchModel.MaxAmount)&DateFrom=@(ViewBag.SearchModel.DateFrom)&DateTo=@(ViewBag.SearchModel.DateTo)&Category=@(ViewBag.SearchModel.Category)&SortBy=@(ViewBag.SortByName)&OrderBy=@(OrderOptions.DESCENDING)&PageSize=@(ViewBag.SearchModel.PageSize)&PageNumber=@(ViewBag.SearchModel.PageNumber)">
+            @if (ViewBag.SortModel.SortBy == ViewBag.SortByName)
+            {
+                @ViewBag.DisplayName <span>&#11165;</span>
+            }else{
+                @ViewBag.DisplayName
+            }
+        </a>
+    }else{
+        <a class="sortable" href="~/entry?SearchString=@(ViewBag.SearchModel.SearchString)&MinAmount=@(ViewBag.SearchModel.MinAmount)&MaxAmount=@(ViewBag.SearchModel.MaxAmount)&DateFrom=@(ViewBag.SearchModel.DateFrom)&DateTo=@(ViewBag.SearchModel.DateTo)&Category=@(ViewBag.SearchModel.Category)&SortBy=@(ViewBag.SortByName)&OrderBy=@(OrderOptions.ASCENDING)&PageSize=@(ViewBag.SearchModel.PageSize)&PageNumber=@(ViewBag.SearchModel.PageNumber)">
+            
+            @if (ViewBag.SortModel.SortBy == ViewBag.SortByName)
+            {
+                @ViewBag.DisplayName <span>&#11167;</span>
+            }else{
+                @ViewBag.DisplayName
+            }
+        </a>
+    }
+</th>

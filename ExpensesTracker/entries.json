@@ -1,0 +1,47 @@
+﻿[
+  {
+    "Id": "e6a1f847-0f02-4a4b-a60d-d6235b2e2c6a",
+    "Name": "Item1",
+    "Amount": 31,
+    "Date": "2023-12-01T00:00:00",
+    "Category": 20,
+    "Details": "Details5",
+    "CreateDt": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": "be9a88f1-2e01-4bc5-8e3f-5e1c7a02b4b1",
+    "Name": "Item2",
+    "Amount": 123,
+    "Date": "2023-11-01T00:00:00",
+    "Category": 10,
+    "Details": "Details1",
+    "CreateDt": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": "93ab05e5-fc5b-4cc3-b04e-93cb5d7c2f41",
+    "Name": "Item3",
+    "Amount": 2345,
+    "Date": "2023-12-06T00:00:00",
+    "Category": 20,
+    "Details": "Details2",
+    "CreateDt": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": "fcab3cbb-8e02-4b79-b1f8-11dbf4c0910a",
+    "Name": "Item4",
+    "Amount": 591,
+    "Date": "2023-12-16T00:00:00",
+    "Category": 10,
+    "Details": "Details3",
+    "CreateDt": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": "dd87b7e3-b8eb-4b28-b24b-e53eeb5d5427",
+    "Name": "Item5",
+    "Amount": 214,
+    "Date": "2023-12-30T00:00:00",
+    "Category": 20,
+    "Details": "Details4",
+    "CreateDt": "2024-01-01T00:00:00"
+  }
+]

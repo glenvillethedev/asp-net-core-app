@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "ExpensesTracker - Add";
+}
+
+<!-- Add Entry - Form -->
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
+        <h2 class="text-center mb-4">Add Entry</h2>
+        <form asp-controller="Entry" asp-action="Add" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label"><i class="fa-solid fa-file-invoice fa-xs"></i>Name</label>
+                <input type="text" class="form-control" id="name" name="Name" placeholder="Enter name" required maxlength="50" value="@(ViewBag.AddModel?.Name)">
+            </div>
+
+            <div class="mb-3">
+                <label for="amount" class="form-label"><i class="fa-solid fa-money-bill fa-xs"></i>Amount</label>
+                <input type="number" class="form-control" id="amount" name="Amount" placeholder="Enter amount" required min="0" step=".01" value="@(ViewBag.AddModel?.Amount)">
+            </div>
+
+            <div class="mb-3">
+                <label for="date" class="form-label"><i class="fa-solid fa-calendar fa-xs"></i>Date</label>
+                <input type="date" class="form-control" id="date" name="Date" required value="@(ViewBag.AddModel?.Date?.ToString("yyyy-MM-dd"))">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label"><i class="fa-solid fa-tags fa-xs"></i>Category</label>
+                <div class="d-flex gap-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Category" id="needs" value="needs" required @((int?)ViewBag.AddModel?.Category == (int)EntryCategoryOptions.NEEDS ? "checked='checked'" : null)>
+                        <label class="form-check-label" for="needs">Needs</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Category" id="wants" value="wants" required @((int?)ViewBag.AddModel?.Category == (int)EntryCategoryOptions.WANTS ? "checked='checked'" : null)>
+                        <label class="form-check-label" for="wants">Wants</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="details" class="form-label"><i class="fa-solid fa-bars fa-xs"></i>Details</label>
+                <textarea class="form-control" id="details" name="Details" rows="3" placeholder="Enter details" maxlength="100">@(ViewBag.AddModel?.Details)</textarea>
+            </div>
+
+            @if (ViewBag.ErrorList != null)
+            {
+                <div id="errorBox" class="alert alert-danger p-2" role="alert">
+                    <ul class="my-1" style="list-style-type:none;padding-left:10px;">
+                        @foreach (string error in ViewBag.ErrorList)
+                        {
+                            <li><i class="fa-solid fa-circle-xmark fa-xs"></i>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus fa-xs"></i>Add</button>
+                <a href="~/entry/add" class="btn btn-secondary"><i class="fa-solid fa-rotate-right fa-flip-horizontal fa-xs"></i>Reset</a>
+            </div>
+        </form>
+    </div>
+</div>

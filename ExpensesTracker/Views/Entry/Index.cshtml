@@ -1,0 +1,274 @@
+﻿@model List<EntryResponse>
+@{
+    ViewBag.Title = "ExpensesTracker";
+}
+
+<!-- Header -->
+<div class="container my-4">
+    <h4 class="mb-3">Financial Summary</h4>
+
+    <div class="row row-cols-1 row-cols-sm-3 g-3">
+        <!-- Total Expenses Card -->
+        <div class="col">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <img src="~/img/Expenses-Card-Icon.png" alt="Expenses Logo" style="max-width: 100px" asp-append-version=true>
+                    <h6 class="card-title">Total Expenses</h6>
+                    <p class="card-text text-success fs-5 fw-bold">$ @ViewBag.CardDisplayModel.TotalExpenses.ToString("N2")</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Needs Card -->
+        <div class="col">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <img src="~/img/Needs-Card-Icon.png" alt="Needs Logo" style="max-width: 100px" asp-append-version=true>
+                    <h6 class="card-title">Total Needs</h6>
+                    <p class="card-text text-primary fs-5 fw-bold">$ @ViewBag.CardDisplayModel.TotalNeeds.ToString("N2")</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Wants Card -->
+        <div class="col">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <img src="~/img/Wants-Card-Icon.png" alt="Wants Logo" style="max-width: 100px" asp-append-version=true>
+                    <h6 class="card-title">Total Wants</h6>
+                    <p class="card-text text-danger fs-5 fw-bold">$  @ViewBag.CardDisplayModel.TotalWants.ToString("N2")</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div class="container my-2">
+    <!-- Responsive Search Form -->
+    <form id="searchForm" class="row g-2 align-items-end" action="~/entry" method="get">
+        <!-- Search Text -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+            <label for="searchString" class="form-label">Search</label>
+            <input type="text" class="form-control" id="searchString" name="SearchString" placeholder="Enter text" value="@ViewBag.SearchModel.SearchString" maxlength="50">
+        </div>
+
+        <!-- Minimum Amount -->
+        <div class="col-6 col-md-4 col-lg-2">
+            <label for="minAmount" class="form-label">Min Amount</label>
+            <input type="number" class="form-control" id="minAmount" name="MinAmount" placeholder="Min" value="@ViewBag.SearchModel.MinAmount" min="0">
+        </div>
+
+        <!-- Maximum Amount -->
+        <div class="col-6 col-md-4 col-lg-2">
+            <label for="maxAmount" class="form-label">Max Amount</label>
+            <input type="number" class="form-control" id="maxAmount" name="MaxAmount" placeholder="Max" value="@ViewBag.SearchModel.MaxAmount" min="0">
+        </div>
+
+        <!-- Date From -->
+        <div class="col-6 col-md-4 col-lg-2">
+            <label for="dateFrom" class="form-label">Date From</label>
+            <input type="date" class="form-control" name="DateFrom" id="dateFrom" value="@ViewBag.SearchModel.DateFrom?.ToString("yyyy-MM-dd")">
+        </div>
+
+        <!-- Date To -->
+        <div class="col-6 col-md-4 col-lg-2">
+            <label for="dateTo" class="form-label">Date To</label>
+            <input type="date" class="form-control" name="DateTo" id="dateTo" value="@ViewBag.SearchModel.DateTo?.ToString("yyyy-MM-dd")">
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" name="Category" id="category">
+                <option>All</option>
+                @if (ViewBag.SearchModel.Category == EntryCategoryOptions.NEEDS)
+                {
+                    <option value=10 selected>Needs</option>
+                    <option value=20>Wants</option>
+                }
+                else if (ViewBag.SearchModel.Category == EntryCategoryOptions.WANTS)
+                {
+                    <option value=10>Needs</option>
+                    <option value=20 selected>Wants</option>
+                }
+                else
+                {
+                    <option value=10>Needs</option>
+                    <option value=20>Wants</option>
+                }
+            </select>
+        </div>
+
+        <input type="hidden" id="pagesizeinput" name="PageSize" value="@ViewBag.SearchModel.PageSize" />
+        <input type="hidden" id="pagenumberinput" name="PageNumber" value="@ViewBag.SearchModel.PageNumber" />
+        <input type="hidden" id="ispaginationinput" name="IsPagination" value=false />
+        <input type="hidden" id="sortbyinput" name="SortBy" value="@ViewBag.SortModel.SortBy" />
+        <input type="hidden" id="orderbyinput" name="OrderBy" value="@ViewBag.SortModel.OrderBy" />
+
+        @if (ViewBag.ErrorList != null)
+        {
+            <div id="errorBox" class="alert alert-danger p-1" role="alert">
+                <ul class="my-1">
+                    @foreach (string error in ViewBag.ErrorList)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <!-- Search and Clear Buttons -->
+        <div class="col-12 text-center mt-3">
+            <button id="searchBtn" type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass fa-xs"></i>Search</button>
+            <a href="~/entry?PageSize=@(ViewBag.SearchModel.PageSize)&PageNumber=1&SortBy=@(ViewBag.SortModel.SortBy)&OrderBy=@(ViewBag.SortModel.OrderBy)" class="btn btn-secondary me-2"><i class="fa-solid fa-rotate-right fa-flip-horizontal fa-xs"></i>Clear</a>
+        </div>
+    </form>
+</div>
+
+<!-- Table -->
+<div class="container my-2">
+    <!-- Table Name -->
+    <h4 class="mb-3">Transaction Records</h4>
+
+    <!-- Bootstrap Table -->
+    @if (Model.Any())
+    {
+        <div class="table-responsive-sm">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        @await Html.PartialAsync("_TableHeader", new ViewDataDictionary(ViewData) { { "SortByName", EntrySortOptions.NAME }, { "DisplayName", "Name" } })
+                        @await Html.PartialAsync("_TableHeader", new ViewDataDictionary(ViewData) { { "SortByName", EntrySortOptions.AMOUNT }, { "DisplayName", "Amount" } })
+                        @await Html.PartialAsync("_TableHeader", new ViewDataDictionary(ViewData) { { "SortByName", EntrySortOptions.DATE }, { "DisplayName", "Date" } })
+                        @await Html.PartialAsync("_TableHeader", new ViewDataDictionary(ViewData) { { "SortByName", EntrySortOptions.CATEGORY }, { "DisplayName", "Category" } })
+                        <th>Details</th>
+                        <th class="text-center" style="width: 100px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (EntryResponse entry in Model)
+                    {
+                        <tr>
+                            <td>@entry.Name</td>
+                            <td>$ @entry.Amount.ToString("N2")</td>
+                            <td>@entry.Date.ToString("MM-dd-yyyy")</td>
+                            <td>@entry.Category.ToString()</td>
+                            <td>@entry.Details</td>
+                            <td class="text-center" style="width: 100px; white-space: nowrap;">
+                                <div class="d-flex justify-content-between" style="min-width: 100px;">
+                                    <a href="~/entry/update/@entry.Id" class="btn btn-warning btn-sm">
+                                        <i class="fa-solid fa-pen fa-xs"></i> Update
+                                    </a>
+                                    <a href="~/entry/delete/@entry.Id" class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-trash fa-xs"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="container mt-3">
+            <div class="row align-items-center">
+
+                <!-- Records per page dropdown -->
+                <div class="col-12 col-md-4 mb-2 mb-md-0 text-center text-md-start">
+                    <div class="d-flex justify-content-center justify-content-md-start align-items-center">
+                        <label for="recordsPerPage" class="me-2">Records per page:</label>
+                        <select id="recordsPerPage" class="form-select" style="width: auto;" onchange="pageSizeClick(this)">
+                            @if (ViewBag.SearchModel.PageSize == 10)
+                            {
+                                <option value="10" selected>10</option>
+                            }
+                            else
+                            {
+                                <option value="10">10</option>
+                            }
+                            @if (ViewBag.SearchModel.PageSize == 30)
+                            {
+                                <option value="30" selected>30</option>
+                            }
+                            else
+                            {
+                                <option value="30">30</option>
+                            }
+                            @if (ViewBag.SearchModel.PageSize == 50)
+                            {
+                                <option value="50" selected>50</option>
+                            }
+                            else
+                            {
+                                <option value="50">50</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="col-12 col-md-4 mb-2 mb-md-0">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mb-0" style="cursor:pointer;">
+
+                            <!-- Previous Button -->
+                            <li class="page-item @(ViewBag.SearchModel.PageNumber == 1 ? "disabled" : "")">
+                                <span class="page-link" tabindex="-1" aria-disabled="true"
+                                      onclick="pageNumberClick(@(ViewBag.SearchModel.PageNumber - 1))">Previous</span>
+                            </li>
+
+                            @for (int i = 0; i < ViewBag.SearchModel.PageList.Count; i++)
+                            {
+                                if (ViewBag.SearchModel.PageList[i] is int)
+                                {
+                                    <li class="page-item @(ViewBag.SearchModel.PageNumber == ViewBag.SearchModel.PageList[i] ? "active" : "")">
+                                        <span class="page-link" onclick="pageNumberClick(@ViewBag.SearchModel.PageList[i])">
+                                            @ViewBag.SearchModel.PageList[i]
+                                        </span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                }
+                            }
+
+                            <!-- Next Button -->
+                            <li class="page-item @(ViewBag.SearchModel.PageNumber == ViewBag.SearchModel.PageList[ViewBag.SearchModel.PageList.Count - 1] ? "disabled" : "")">
+                                <span class="page-link" onclick="pageNumberClick(@(ViewBag.SearchModel.PageNumber + 1))">Next</span>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Total Records Display -->
+                <div class="col-12 col-md-4 text-md-end text-center">
+                    <span>@(ViewBag.SearchModel.CurrentRecords) of <strong>@(ViewBag.SearchModel.TotalRecords) Records</strong></span>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center">No transactions found. Add one <a asp-controller="Entry" asp-action="Add">here</a>.</div>
+    }
+</div>
+
+@section custom_scripts {
+    <script>
+        function pageNumberClick(pageNumber){
+            document.getElementById("pagenumberinput").value = pageNumber;
+            document.getElementById("ispaginationinput").value = true;
+            document.getElementById("searchBtn").click();
+        }
+        function pageSizeClick(object){
+            document.getElementById("pagesizeinput").value = object.value;
+            document.getElementById("searchBtn").click();
+        }
+    </script>
+}

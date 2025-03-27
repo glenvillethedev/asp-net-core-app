@@ -1,0 +1,63 @@
+﻿.sortable {
+    text-decoration: none;
+    color: inherit; /* Inherit text color */
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.sortable:hover {
+    text-decoration: none;
+    color: #007bff; /* Optional hover effect */
+}
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+}
+
+.error-container h1 {
+    font-size: 5rem;
+    color: #dc3545; /* Bootstrap danger color */
+}
+
+.error-container p {
+    font-size: 1.5rem;
+    color: #6c757d; /* Bootstrap secondary color */
+}
+
+.wip-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+}
+
+.wip-container h1 {
+    font-size: 4rem;
+    color: #0d6efd; /* Bootstrap primary blue */
+}
+
+.wip-container h3 {
+    font-size: 2rem;
+    color: #6c757d; /* Bootstrap primary blue */
+    margin-bottom: 50px;
+}
+
+.wip-container p {
+    font-size: 1.5rem;
+    color: #6c757d; /* Bootstrap secondary color */
+}
+
+.btn-home {
+    margin-top: 20px;
+}
+
+i {
+    margin-right: 5px;
+}

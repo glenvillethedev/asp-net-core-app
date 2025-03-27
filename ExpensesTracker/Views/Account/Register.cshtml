@@ -1,0 +1,105 @@
+﻿@{
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewBag.Title = "ExpensesTracker - Register";
+}
+
+<div class="container d-flex justify-content-center align-items-center mt-4">
+    <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
+        <h2 class="text-center mb-4">Register</h2>
+        <form asp-controller="Account" asp-action="Register" method="post">
+            <div class="mb-3">
+                <i class="fa-solid fa-user fa-xs"></i><label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required autofocus value="@(ViewBag.RequestModel?.Name)">
+            </div>
+
+            <div class="mb-3">
+                <i class="fa-solid fa-envelope fa-xs"></i><label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required value="@(ViewBag.RequestModel?.Email)">
+            </div>
+
+            <div class="mb-3">
+                <i class="fa-solid fa-phone fa-xs"></i><label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required value="@(ViewBag.RequestModel?.Phone)">
+            </div>
+
+            <div class="mb-3">
+                <i class="fa-solid fa-lock fa-xs"></i><label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required value="@(ViewBag.RequestModel?.Password)">
+            </div>
+
+            <div class="mb-3">
+                <i class="fa-solid fa-circle-check fa-xs"></i><label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+            </div>
+
+            @* <div class="mb-3"> TODO: User Roles Radio Buttons
+                <label class="form-label">Role</label>
+                <div class="d-flex gap-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="role" id="role-user" value="10" required @(ViewBag.RequestModel == null || ViewBag.RequestModel?.Role == AppUserRoles.User ? "checked" : null)>
+                        <label class="form-check-label" for="role-user">User</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="role" id="role-admin" value="20" @(ViewBag.RequestModel?.Role == AppUserRoles.Admin ? "checked" : null)>
+                        <label class="form-check-label" for="role-admin">Admin</label>
+                    </div>
+                </div>
+            </div> *@
+
+            <div id="passwordMismatch" class="alert alert-danger d-none p-2 mt-3" role="alert">
+                <i class="fa-solid fa-circle-xmark fa-xs"></i>Passwords do not match.
+            </div>
+
+            @if (ViewBag.ErrorList != null)
+            {
+                <div id="errorBox" class="alert alert-danger p-2 mt-3" role="alert">
+                    <ul class="my-1" style="list-style-type:none;padding-left:10px;">
+                        @foreach (string error in ViewBag.ErrorList)
+                        {
+                            <li><i class="fa-solid fa-circle-xmark fa-xs"></i>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-user-plus fa-xs"></i>Register</button>
+                <button type="reset" id="resetBtn" class="btn btn-secondary"><i class="fa-solid fa-rotate-right fa-flip-horizontal fa-xs"></i>Reset</button>
+            </div>
+
+            <p class="text-center mt-3">
+                Already have an account? <a asp-controller="Account" asp-action="SignIn">Sign In</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+@section custom_scripts {
+    <script>
+        document.querySelector("form").addEventListener("submit", function(event) {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var passwordErrorBox = document.getElementById("passwordMismatch");
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                passwordErrorBox.classList.remove("d-none");
+            } else {
+                passwordErrorBox.classList.add("d-none");
+            }
+
+            var errorBox = document.getElementById("errorBox");
+            errorBox.classList.add("d-none");
+        });
+
+        document.querySelector("#resetBtn").addEventListener("click", clearErrors);
+
+        function clearErrors(){
+            var passwordErrorBox = document.getElementById("passwordMismatch");
+            passwordErrorBox.classList.add("d-none");
+
+            var errorBox = document.getElementById("errorBox");
+            errorBox.classList.add("d-none");
+        }
+    </script>
+}

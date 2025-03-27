@@ -1,0 +1,22 @@
+﻿@{
+    if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    }
+
+    ViewBag.Title = "ExpensesTracker - Internal Server Error";
+}
+
+<!-- 500 Internal Server Error Message -->
+<main class="flex-grow-1">
+    <div class="container error-container">
+        <h1>500</h1>
+        <p>Oops! Something went wrong on our server.</p>
+        <p>Please try again later or contact support.</p>
+        <a href="/" class="btn btn-danger btn-home">Back to Home</a>
+    </div>
+</main>

@@ -32,7 +32,7 @@ A simple and user-friendly web application for managing and tracking personal ex
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/ExpensesTracker.git
+git clone https://github.com/glenvillethedev/asp-net-core-app.git
 cd ExpensesTracker
 ```
 
